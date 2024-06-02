@@ -182,7 +182,7 @@ if user_os == "windows":
 	chromedriver = "chromedriver.exe"
 else:
 	chromedriver = "chromedriver"
-driver = webdriver.Chrome(executable_path=chromedriver, chrome_options=chromeOptions)
+driver = webdriver.Chrome()
 
 
 #user agent configurations
@@ -198,39 +198,39 @@ print()
 
 # Login to leetcode
 if acc_type == "leetcode":
-	already_present = driver.find_element_by_name("login").get_attribute('value')
+	already_present = driver.find_element(By.NAME , "login").get_attribute('value')
 	for i in range(len(already_present)+1):
-		driver.find_element_by_name("login").send_keys(Keys.BACKSPACE);
+		driver.find_element(By.NAME, "login").send_keys(Keys.BACKSPACE);
 
 	# user name will be entered
-	driver.find_element_by_name("login").send_keys(username)
+	driver.find_element(By.NAME, "login").send_keys(username)
 	time.sleep(1)
 
 	# To Clear password field
-	already_present = driver.find_element_by_name("password").get_attribute('value')
+	already_present = driver.find_element(By.NAME, "password").get_attribute('value')
 	for i in range(len(already_present)+1):
-		driver.find_element_by_name("password").send_keys(Keys.BACKSPACE);
+		driver.find_element(By.NAME, "password").send_keys(Keys.BACKSPACE);
 
 	# password will be entered
-	driver.find_element_by_name("password").send_keys(pwd)
+	driver.find_element(By.NAME, "password").send_keys(pwd)
 	time.sleep(1)
 
-	driver.find_element_by_id("signin_btn").click()
+	driver.find_element(By.ID, "signin_btn").click()
 	# You may increase below timer to 10 if you have slow internet connection.
-	time.sleep(5)
+	time.sleep(15)
 	
 	try:
-		err_msg = driver.find_element_by_xpath("/html/body/div[1]/div/div[2]/div/div[2]/div/div/div/p").text
+		err_msg = driver.find_element(By.XPATH,"/html/body/div[1]/div/div[2]/div/div[2]/div/div/div/p").text
 		if "CAPTCHA" in err_msg:
 			print("If captcha issue persist then connect to the VPN and rerun the code")
 			print("                              OR                                   ")
 			print("ENTER THE CAPTCHA, CLICK ON SIGN-IN BUTTON. AFTER THIS, PRESS 'y' KEY HERE FOLLOWED BY ENTER TO PROCEED ('y'/'Y'): ",end = "")
 			input()
 			print()
-			driver.find_element_by_xpath("//button[@class='btn__2FMG fancy-btn__CYhs primary__3S2m light__3zR9 btn__1eiM btn-md__3VAX ']").click()
+			driver.find_element("//button[@class='btn__2FMG fancy-btn__CYhs primary__3S2m light__3zR9 btn__1eiM btn-md__3VAX ']").click()
 			# You may increase below timer to 10 if you have slow internet connection.
-			time.sleep(5)
-			err_msg = driver.find_element_by_xpath("/html/body/div[1]/div/div[2]/div/div[2]/div/div/div/p").text
+			time.sleep(15)
+			err_msg = driver.find_element("/html/body/div[1]/div/div[2]/div/div[2]/div/div/div/p").text
 		if "username" in err_msg:
 			print()
 			print("Wrong username and/or password")
@@ -241,11 +241,11 @@ if acc_type == "leetcode":
 		print("Login Successful")
 		print()
 		# You may increase below timer to 10 if you have slow internet connection.
-		time.sleep(5)
+		time.sleep(15)
 		
 			
 elif acc_type == "linkedin":
-	driver.find_element_by_xpath("/html/body/div[1]/div/div[2]/div/div[2]/div/div/div/div[2]/div/a[1]").click()
+	driver.find_element("/html/body/div[1]/div/div[2]/div/div[2]/div/div/div/div[2]/div/a[1]").click()
 	time.sleep(5)
 	linkedin_username_xpath = "/html/body/div/main/div/form/div[1]/input"
 	
@@ -320,23 +320,23 @@ elif acc_type == "linkedin":
 		
 	
 elif acc_type == "google":
-	driver.find_element_by_xpath("/html/body/div[1]/div/div[2]/div/div[2]/div/div/div/div[2]/div/a[2]").click()
+	driver.find_element("/html/body/div[1]/div/div[2]/div/div[2]/div/div/div/div[2]/div/a[2]").click()
 	time.sleep(5)
 	google_username_xpath = "/html/body/div[1]/div[1]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/form/span/section/div/div/div[1]/div/div[1]/div/div[1]/input"
 	
-	already_present = driver.find_element_by_xpath(google_username_xpath).get_attribute('value')
+	already_present = driver.find_element(google_username_xpath).get_attribute('value')
 	for i in range(len(already_present)+1):
-		driver.find_element_by_xpath(google_username_xpath).send_keys(Keys.BACKSPACE);
+		driver.find_element(google_username_xpath).send_keys(Keys.BACKSPACE);
 	# user name will be entered
-	driver.find_element_by_xpath(google_username_xpath).send_keys(username)
+	driver.find_element(google_username_xpath).send_keys(username)
 	time.sleep(1)
 	google_username_next_xpath = "/html/body/div[1]/div[1]/div[2]/div[2]/div/div/div[2]/div/div[2]/div/div[1]/div"
-	driver.find_element_by_xpath(google_username_next_xpath).click()
+	driver.find_element(google_username_next_xpath).click()
 	time.sleep(5)
 	try:
 		# If error occurs, then exit
 		goole_uname_err_xpath = "/html/body/div[1]/div[1]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/form/span/section/div/div/div[1]/div/div[2]/div[2]/div/span"
-		err_mes = driver.find_element_by_xpath(goole_uname_err_xpath).text
+		err_mes = driver.find_element(goole_uname_err_xpath).text
 		if "Couldn't find" in err_mes:
 			print("You entered wrong username.")
 		else:
@@ -346,21 +346,21 @@ elif acc_type == "google":
 	except Exception as e:
 		# If username is correct then only proceed
 		google_password_xpath = "/html/body/div[1]/div[1]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/form/span/section/div/div/div[1]/div[1]/div/div/div/div/div[1]/div/div[1]/input"
-		already_present = driver.find_element_by_xpath(google_password_xpath).get_attribute('value')
+		already_present = driver.find_element(google_password_xpath).get_attribute('value')
 		for i in range(len(already_present)+1):
-			driver.find_element_by_xpath(google_password_xpath).send_keys(Keys.BACKSPACE);
+			driver.find_element(google_password_xpath).send_keys(Keys.BACKSPACE);
 		# password will be entered
-		driver.find_element_by_xpath(google_password_xpath).send_keys(pwd)
+		driver.find_element(google_password_xpath).send_keys(pwd)
 		time.sleep(1)
 		google_password_next_xpath = "/html/body/div[1]/div[1]/div[2]/div[2]/div/div/div[2]/div/div[2]/div/div[1]/div"
-		driver.find_element_by_xpath(google_password_next_xpath).click()
+		driver.find_element(google_password_next_xpath).click()
 		# You may increase below timer to 10 if you have slow internet connection.
 		time.sleep(5)
 		
 		try:
 			# If error occurs, then exit
 			goole_err_xpath = "/html/body/div[1]/div[1]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/form/span/section/div/div/div[1]/div[2]/div[2]/span"
-			err_mes = driver.find_element_by_xpath(goole_err_xpath).text
+			err_mes = driver.find_element(goole_err_xpath).text
 			if "Wrong password" in err_mes:
 				print("You entered wrong password")
 			else:
@@ -488,7 +488,7 @@ print("Webpage for all submission loaded.")
 print()
 
 try:
-	if driver.find_element_by_id("submission-list-app"):
+	if driver.find_element(By.ID, "submission-list-app"):
 		print("Submission links loaded successfully...")
 		print()
 except Exception as e:
@@ -499,7 +499,7 @@ except Exception as e:
 
 print("Downloading links of submission...")
 while(True):
-	tbody = driver.find_element_by_id("submission-list-app").find_element(By.TAG_NAME, "tbody")
+	tbody = driver.find_element(By.ID, "submission-list-app").find_element(By.TAG_NAME, "tbody")
 	all_tr = tbody.find_elements(By.TAG_NAME, "tr")
 	for row in all_tr:
 		third_row_value = row.find_elements(By.TAG_NAME, "td")[2]               # get status column value from table
@@ -534,7 +534,7 @@ while(True):
 			
 	try:
 		# Load next submission page
-		next_page = driver.find_elements_by_class_name("next")[0].find_element(By.TAG_NAME, "a").get_attribute('href')
+		next_page = driver.find_elements(By.CLASS_NAME,"next")[0].find_element(By.TAG_NAME, "a").get_attribute('href')
 		print("Loading next page...",next_page)
 		driver.get(next_page)
 		# You may increase below timer to 6 if you have slow internet connection.
@@ -561,7 +561,7 @@ for i in range(len(all_file_list)):
 		cnt = 0
 		for submission_link in f:
 			sub_id = submission_link.split("/")[-2]
-			#print(sub_id)
+			#print(sub_id)x
 			driver.get(submission_link)
 			
 			# Increase this timer to 15 if you have slow internet connection
@@ -572,8 +572,8 @@ for i in range(len(all_file_list)):
 				if invd in que_name:
 					que_name = remove_invalid(que_name,invd)
 			code_in_list = []
-			code_lines = driver.find_elements_by_class_name("ace_line")
-			prog_lang = driver.find_elements_by_id("result_language")[0].text.strip()
+			code_lines = driver.find_elements(By.CLASS_NAME, "ace_line")
+			prog_lang = driver.find_elements(By.ID, "result_language")[0].text.strip()
 
 			# create file
 			with open(os.path.join(file_dir, que_name + "_" + str(sub_id) + extention_of[prog_lang]), 'w') as f2:
